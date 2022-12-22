@@ -1,13 +1,12 @@
 const Component = require('../Component');
 const TowerController = require('./TowerController');
 const ENV_CLIENT = !(typeof window === 'undefined');
-
+const Client = require('../../client/Client');
 @Component.serializedName("TowerTrigger")
 class TowerTrigger extends Component {
 
     constructor() {
         super();
-
         this.props.triggerType = 0;
     }
 
@@ -21,7 +20,8 @@ class TowerTrigger extends Component {
 
     onTriggerEnter() {
         if (ENV_CLIENT) {
-            if (this.props.triggerType === 6) {
+			Client.current.sendOperateMessage("正在执行操作——"+ (this.props.triggerType === 0 ? "运行" : "生成"+this.props.triggerType+"层"));
+            if (this.props.triggerType === 0) {
                 TowerTrigger.getClientIntro().innerText = xorIntro;
                 TowerTrigger.getClientIntro().style.display = 'block';
             }
@@ -32,18 +32,9 @@ class TowerTrigger extends Component {
                 case 0:
                     this.towerController.simMoveStart();
                     break;
-                case 3:
-                    this.towerController.setPlateCount(3);
+                default:
+                    this.towerController.setPlateCount(this.props.triggerType);
                     break;
-                case 4:
-                    this.towerController.setPlateCount(4);
-                    break;
-                case 5:
-                    this.towerController.setPlateCount(5);
-                    break;
-                // default:
-                //     this.towerController.setPlateCount(this.props.triggerType);
-                //     break;
             }
         }
     }
@@ -54,40 +45,19 @@ class TowerTrigger extends Component {
         }
     }
 
-    // static getClientIntro() {
-    //     if (!TowerTrigger.clientIntro) {
-    //         TowerTrigger.clientIntro = document.createElement('div');
-    //         TowerTrigger.clientIntro.style.position = 'absolute';
-    //         TowerTrigger.clientIntro.style.top = '10px';
-    //         TowerTrigger.clientIntro.style.left = '10px';
-    //         TowerTrigger.clientIntro.style.width = '200px';
-    //         TowerTrigger.clientIntro.style.color = 'white';
-    //         TowerTrigger.clientIntro.style.display = 'none';
-    //         document.getElementById('gamePanel').appendChild(TowerTrigger.clientIntro);
-    //     }
-    //     return TowerTrigger.clientIntro;
-    // }
-
     static getClientIntro() {
         if (!TowerTrigger.clientIntro) {
             TowerTrigger.clientIntro = document.createElement('div');
             TowerTrigger.clientIntro.style.position = 'absolute';
-            TowerTrigger.clientIntro.style.height = '190px';
-            TowerTrigger.clientIntro.style.width = '310px';
-            TowerTrigger.clientIntro.style.left = '37.5%';
-            TowerTrigger.clientIntro.style.top = '5%';
-            TowerTrigger.clientIntro.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-            //TowerTrigger.clientIntro.style.transform = translate('-50%','-30%');
-            //TowerTrigger.clientIntro.style.top = '10px';
-            //TowerTrigger.clientIntro.style.left = '10px';
-
+            TowerTrigger.clientIntro.style.top = '10px';
+            TowerTrigger.clientIntro.style.left = '10px';
+            TowerTrigger.clientIntro.style.width = '200px';
             TowerTrigger.clientIntro.style.color = 'white';
             TowerTrigger.clientIntro.style.display = 'none';
             document.getElementById('gamePanel').appendChild(TowerTrigger.clientIntro);
         }
         return TowerTrigger.clientIntro;
     }
-
 }
 
 module.exports = TowerTrigger;

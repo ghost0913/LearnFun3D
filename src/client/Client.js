@@ -86,6 +86,8 @@ class Client {
             // console.log(this);
             this.socket.removeAllListeners(Event.CHAT_MESSAGE);
             this.socket.removeAllListeners(Event.CLIENT_SEND_STATE);
+			this.socket.removeAllListeners(Event.OPERATE_MESSAGE);
+			
             callback(data);
         });
     }
@@ -112,6 +114,15 @@ class Client {
             message: message
         });
     }
+	
+	sendOperateMessage(message) {
+	    if (!this.roomId) return;
+	    // console.log('Client send a msg');
+	    // console.log(this.socket);
+	    this.socket.emit(Event.OPERATE_MESSAGE, {
+	        message: message
+	    });
+	}
 }
 
 Client._inited = false;

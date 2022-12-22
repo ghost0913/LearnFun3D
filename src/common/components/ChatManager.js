@@ -17,6 +17,7 @@ class ChatManager extends Component {
         //this.chatInputDomElement = document.getElementById('chatInput');
         //this.chatPanel = document.getElementById('chatPanel');
         Client.current.subscribe(Event.CHAT_MESSAGE, this.onChatMessage.bind(this));
+		Client.current.subscribe(Event.OPERATE_MESSAGE, this.onOperateMessage.bind(this));
 
         this.existMessagesTimestamp = [];
         this.cooldown = 0;
@@ -67,6 +68,21 @@ class ChatManager extends Component {
         }
         this.existMessagesTimestamp.push(Date.now());
     }
+	
+	onOperateMessage(data) {
+	    let message = document.createElement("p");
+	    message.innerText = "操作提示：" + data.name + "-" + data.message;
+	    message.style.color = 'skyblue';
+	    message.style.margin = '0';
+	    message.style.fontSize = '16px';
+		message.style.fontStyle = 'italic';
+	    if (this.getChatPanel().firstChild) {
+	        this.getChatPanel().insertBefore(message, this.getChatPanel().firstChild);
+	    } else {
+	        this.getChatPanel().appendChild(message);
+	    }
+	    this.existMessagesTimestamp.push(Date.now());
+	}
 
     getChatInput() {
         if (!this.chatInputDomElement) {

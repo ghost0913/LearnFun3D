@@ -113,7 +113,7 @@ class RoomList extends React.Component {
                                     label={'join'} style={{color: 'white', marginRight: '7px'}}
                                     onClick={this.onClickJoinRoom.bind(this, tile)}/>}>
                                 <img
-                                    src={'images/' + (tile.type === 1 ? 'turingmachine.jpg' : tile.type === 2 ?'hanoi.jpg':'sort.jpg')}
+                                    src={'images/' + (tile.type === 1 ? 'turingmachine.jpg' : 'hanoi.jpg')}
                                     style={{height: '100%', width: 'auto', minHeight: '100%', minWidth: '100%'}} />
                             </GridTile>
                         ))}

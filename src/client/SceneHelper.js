@@ -60,8 +60,6 @@ module.exports = {
         ));
     },
 
-    
-
     initTrackballControls: function (camera, renderer) {
         // console.log('before trackballControls constructor');
         // console.log('renderer.domElement is null?', renderer.domElement == undefined);

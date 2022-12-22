@@ -126,6 +126,15 @@ class Server {
                         message: data.message
                     });
                 });
+				
+				// 操作
+				socket.on(Event.OPERATE_MESSAGE, (data) => {
+				    console.log("server.js socket onClientJoinRoom onOperateMessage", socket.id);
+				    this.io.in(socket.room.id).emit(Event.OPERATE_MESSAGE, {
+				        name: socket.username,
+				        message: data.message
+				    });
+				});
             }
             socket.emit(Event.CLIENT_JOIN_ROOM, retdata);
         });
@@ -237,6 +246,7 @@ class Server {
 
         socket.removeAllListeners(Event.CHAT_MESSAGE);
         socket.removeAllListeners(Event.CLIENT_SEND_STATE);
+		socket.removeAllListeners(Event.OPERATE_MESSAGE);
         socket.join(Event.ROOMS_CHANGE);    // 监听房间变动
         socket.leave(room.id);   // 退出房间
         socket.leave(room.id + '/chat'); // 退出房间聊天

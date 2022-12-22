@@ -67,4 +67,3 @@ require("./components/StepTrigger");
 require("./components/Synchronizer");
 require("./components/TowerController");
 require("./components/TowerTrigger");
-require("./components/BeginTrigger");

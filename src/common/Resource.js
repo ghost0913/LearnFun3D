@@ -86,15 +86,14 @@ Resource.loadOBJ = function(name) {
                 objLoader.setMaterials(material);
                 parseTextInner(name + ".obj", objLoader, (obj) => {
                     Resource.Model[name] = obj;
-                    console.log('resource.loadOBJ() completed name =', name, 'has cache =', Resource.Model[name] !== undefined);
-                    console.log('resource.loadOBJ() now Resource.Model =', getCachedModelName());
+                    // console.log('resource.loadOBJ() completed name =', name, 'has cache =', Resource.Model[name] !== undefined);
+                    // console.log('resource.loadOBJ() now Resource.Model =', getCachedModelName());
                     // console.log('');
                     resolve(obj.clone());
                 });
             });
         } else {
             // 服务端不加载贴图
-     
             parseTextInner(name + ".obj", objLoader, (obj) => {
                 Resource.Model[name] = obj;
                 // console.log('resource.loadOBJ() completed name =', name, 'has cache =', Resource.Model[name] !== undefined);
@@ -102,17 +101,6 @@ Resource.loadOBJ = function(name) {
                 // console.log('');
                 resolve(obj.clone());
             });
-            // parseTextInner(name + ".mtl", mtlLoader, (material) => {
-            //     material.preload();
-            //     objLoader.setMaterials(material);
-            //     parseTextInner(name + ".obj", objLoader, (obj) => {
-            //         Resource.Model[name] = obj;
-            //         console.log('resource.loadOBJ() completed name =', name, 'has cache =', Resource.Model[name] !== undefined);
-            //         console.log('resource.loadOBJ() now Resource.Model =', getCachedModelName());
-            //         // console.log('');
-            //         resolve(obj.clone());
-            //     });
-            // });
         }
     });
 };

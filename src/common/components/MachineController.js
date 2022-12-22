@@ -71,7 +71,9 @@ class MachineController extends Component {
         } else {
             this.state.content = 'e' + this.state.content;
         }
-        this.repaint();    }
+        this.repaint();
+
+    }
 
     moveRight() {
         if (this.cooldown > 0) return;
@@ -80,17 +82,17 @@ class MachineController extends Component {
         if (this.state.pointer < this.state.content.length - 1) {
             this.state.pointer++;
         } else {
-            this.state.content = this.state.content + 'e';        }
+            this.state.content = this.state.content + 'e';
+        }
         this.repaint();
     }
-//更改字符
+
     setChar(char) {
         if (this.cooldown > 0) return;
         this.cooldown += this.props.cooldown;
-//获取当前光标所在位置的字符。如果该字符与函数的参数 char 相同，也直接退出函数。
+
         let current = this.state.content.charAt(this.state.pointer);
         if (current === char) return;
-//否则，将函数的参数 char 插入到当前光标位置，并调用 repaint 函数。
         let c = this.state.content;
         this.state.content = c.substring(0, this.state.pointer) + char + c.substring(this.state.pointer + 1, c.length);
         this.repaint();

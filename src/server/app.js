@@ -1,37 +1,39 @@
-const Server = require('./Server');
 const path = require('path');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const socketioJwt = require('socketio-jwt');
 const CryptoJS = require("crypto-js");
-const User = require('./User');
-const JWT_SECRET = 'logthecatfish';
-const app = express();
 
-// express server
-// send static files
+const Server = require('./Server');
+const UserUtils = require('./UserUtils');
+
+const JWT_SECRET = 'logthecatfish';
+
+const app = express();
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('public/index.html'));
 });
 
-app.get('/*' , (req, res) => {
+// 加载静态文件
+app.get('/*', (req, res) => {
     const file = req.params[0];
-    //console.log('\t :: Express :: file requested : ' + file);
+    // console.log('\t :: Express :: file requested : ' + file);
     res.sendFile(path.resolve('public/' + file));
 });
 
-// user server
+// 用户登录
 app.use(require('body-parser').json());
 app.post('/login', (req, res) => {
-    let bytes  = CryptoJS.AES.decrypt(req.body.data, JWT_SECRET);
+    let bytes = CryptoJS.AES.decrypt(req.body.data, JWT_SECRET);
     let data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    if (Date.now() - data.timestamp > 1000) {
-        res.json({ code: 2, message: "登录超时，请重试！"});
-        return;
-    }
+    // if (Date.now() - data.timestamp > 1000) {
+    //     res.json({ code: 2, message: "登录超时，请重试！" });
+    //     return;
+    // }
     let { username, password } = data;
-    User.validate(username, password).then(() => {
+    UserUtils.validate(username, password).then(() => {
         // 判断重复登录
+        // 这里是异步 可能出错
         if (gameSvr.onlineUsers.has(username)) {
             res.json({ code: 3, message: "不能重复登录！"});
             return;
@@ -43,10 +45,12 @@ app.post('/login', (req, res) => {
     });
 });
 
+// 用户注册
 app.post('/register', (req, res) => {
     let bytes  = CryptoJS.AES.decrypt(req.body.data, JWT_SECRET);
     let { username, password } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    User.new(username, password).then(() => {
+
+    UserUtils.new(username, password).then(() => {
         let token = loginGameServer(username, password);
         res.json({ code: 0, token: token, username: username });
     }).catch((err) => {
@@ -54,9 +58,8 @@ app.post('/register', (req, res) => {
     });
 });
 
-//云上部署代码
-// const server = app.listen(11111,'43,143,111,113',() => {
-const server = app.listen(3000, () => {
+// type express.Server (http.Server)
+const server = app.listen(3000, 'localhost', () => {
     const host = server.address().address;
     const port = server.address().port;
     console.log('Example app listening at http://%s:%s', host, port);
@@ -70,21 +73,24 @@ io.set('authorization', socketioJwt.authorize({
     handshake: true
 }));
 
+// 类似app.use 注册中间件
 io.use(function (socket, next) {
-    //console.log(socket.handshake.query.token);
+    // 根据保存的 token-username对 选出username
+    console.log('app.js io.use', socket.id);
     socket.username = tokenUserMap[socket.handshake.query.token];
     return next();
 });
 
 const gameSvr = new Server(io);
 io.on('connection', (socket) => {
+    console.log('app.js io.onConnection', socket.username);
     gameSvr.addClient(socket);
 });
 
-// token-username mapping
+// 对每个登录的user记录一个token
 const tokenUserMap = {};
 function loginGameServer(username, password) {
-    let token = jwt.sign({username: username, password: password}, JWT_SECRET, { expiresIn: '5h' });
+    let token = jwt.sign({username: username, password: password}, JWT_SECRET, { expiresIn: '1m' });
     tokenUserMap[token] = username;
     return token;
 }

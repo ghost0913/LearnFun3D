@@ -9,11 +9,10 @@ const Input = require('../../client/Input');
 @Component.serializedName('FirstPersonController')
 class FirstPersonController extends Component {
 
-    //设置行走范围与速度。xMax = floor.length/2 , zMax = floor.width/2
     constructor() {
         super();
         this.props.speed = 6;
-        this.props.mapBorder = {xMax: 10, xMin: -10, zMax: 10, zMin: -10};
+        this.props.mapBorder = {xMax: 8, xMin: -8, zMax: 8, zMin: -8};
     }
 
     start() {
