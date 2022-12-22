@@ -12,12 +12,8 @@ const SceneHelper = require('./SceneHelper');
 const loadScene = require('../common/loadScene');
 const GameConfig = require('../common/GameConfig');
 const GameObject = require('../common/GameObject');
-// const THREE = require('three')
-
-// require('"https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"')
 const Path = require('path');
 const fs =  require('fs');
-
 
 class App extends React.Component {
 
@@ -72,8 +68,8 @@ class App extends React.Component {
         require('../common/Resource').loadScene(sceneName).then(scene => {
 
             if (room.type === 1 || room.type === 2 || room.type === 4) {
-                SceneHelper.createSkyBox(scene, ['images/posx.jpg', 'images/negx.jpg', 'images/posy.jpg',
-                    'images/negy.jpg', 'images/negz.jpg', 'images/posz.jpg'], 175);
+                SceneHelper.createSkyBox(scene, ['images/galaxy+X.jpg', 'images/galaxy-X.jpg', 'images/galaxy+Y.jpg',
+                    'images/galaxy-Y.jpg', 'images/galaxy-Z.jpg', 'images/galaxy+Z.jpg'], 75);
 
                 // 生成自身 同时生成camera
                 SceneHelper.createSelfPlayer(scene, playerType);
@@ -84,10 +80,6 @@ class App extends React.Component {
                 this.game.start();
                 this.setState({progress: 100});
 
-                // var loader = new THREE.GLTFLoaer();
-                // loader.load('./public/3Dmodel/scene.gltf'),function(gltf){
-                //     gltf.scene.scale.set(20,20,20);
-                //     scene_scene.add(gltf.scene);
             } else if (room.type === 3) {
                 const MILKY_WAY_SIZE = 15000;
 

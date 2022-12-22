@@ -2,6 +2,7 @@ const Component = require('../Component');
 const THREE = require('three');
 const ENV_CLIENT = !(typeof window === 'undefined');
 const Client = ENV_CLIENT ? require('../../client/Client') : undefined;
+const Input = require('../../client/Input');
 
 /**
  * 挂在玩家对象身上，同步位置信息
@@ -27,6 +28,7 @@ class Synchronizer extends Component {
 
         // 非本机，插值相关
         this.velocity = new THREE.Vector3();
+        this.isE = false;
     }
 
     start() {
@@ -52,7 +54,8 @@ class Synchronizer extends Component {
                 this.gameObject.serverState = {
                     position: {x: this.gameObject.position.x, y: this.gameObject.position.y, z: this.gameObject.position.z},
                     velocity: {x: this.velocity.x, y: this.velocity.y, z: this.velocity.z},
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    isE:this.isE
                 };
             }
         }
@@ -62,6 +65,8 @@ class Synchronizer extends Component {
      * 自身状态数据
      */
     collectState(deltaTime) {
+        const isE = Input.getKey("E")
+
         let position = this.gameObject.position.clone();
         let velocity = new THREE.Vector3();
         velocity.subVectors(position, this.lastCyclePosition).divideScalar(deltaTime);
@@ -70,7 +75,8 @@ class Synchronizer extends Component {
         return {
             position: {x: position.x, y: position.y, z: position.z},
             velocity: {x: velocity.x, y: velocity.y, z: velocity.z},
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            isE:isE
         };
     }
 
@@ -91,6 +97,7 @@ class Synchronizer extends Component {
             // todo
         } else {
             this.gameObject.position.set(position.x, position.y, position.z);
+            this.isE = this.gameObject.peerState.isE
         }
     }
 }

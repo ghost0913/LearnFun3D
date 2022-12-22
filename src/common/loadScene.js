@@ -8,11 +8,10 @@ module.exports = function () {
     return new Promise(function (resolve) {
 
         let tower = new Promise(function (resolve) {
-            // cylinder 圆柱体
             var geometry = new THREE.CylinderGeometry( 0.2, 0.2, 5 );
             var material = new THREE.MeshPhongMaterial( {color: 6684774} );
             var cylinder = new THREE.Mesh( geometry, material );
-            cylinder.position.set(0, 4, 0);
+            cylinder.position.set(0, 2.5, 0);
             console.log(JSON.stringify(cylinder.toJSON()));
             resolve(new GameObject(cylinder));
         });

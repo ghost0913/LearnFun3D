@@ -1,13 +1,13 @@
 const Component = require('../Component');
 const MachineController = require('./MachineController');
 const ENV_CLIENT = !(typeof window === 'undefined');
-
+const Client = require('../../client/Client');
 @Component.serializedName("MachineTrigger")
 class MachineTrigger extends Component {
 
     constructor() {
         super();
-
+		this.typeChar = ['设0','设1','左移','右移','清除','取反运算'];
         this.props.triggerType = 0;
     }
 
@@ -20,8 +20,11 @@ class MachineTrigger extends Component {
     }
 
     onTriggerEnter() {
+		
         if (ENV_CLIENT) {
-            if (this.props.triggerType === 6) {
+			Client.current.sendOperateMessage("正在执行操作——"+this.typeChar[this.props.triggerType]);
+			// Client.current.sendChatMessage("正在执行操作——"+this.typeChar[this.props.triggerType]);
+            if (this.props.triggerType === 5) {
                 MachineTrigger.getClientIntro().innerText = xorIntro;
                 MachineTrigger.getClientIntro().style.display = 'block';
             }
@@ -58,20 +61,13 @@ class MachineTrigger extends Component {
         }
     }
 
-    //设置客户端的游戏提示
     static getClientIntro() {
         if (!MachineTrigger.clientIntro) {
             MachineTrigger.clientIntro = document.createElement('div');
             MachineTrigger.clientIntro.style.position = 'absolute';
-            MachineTrigger.clientIntro.style.height = '190px';
-            MachineTrigger.clientIntro.style.width = '310px';
-            MachineTrigger.clientIntro.style.left = '37.5%';
-            MachineTrigger.clientIntro.style.top = '5%';
-            MachineTrigger.clientIntro.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-            //MachineTrigger.clientIntro.style.transform = translate('-50%','-30%');
-            //MachineTrigger.clientIntro.style.top = '10px';
-            //MachineTrigger.clientIntro.style.left = '10px';
-
+            MachineTrigger.clientIntro.style.top = '10px';
+            MachineTrigger.clientIntro.style.left = '10px';
+            MachineTrigger.clientIntro.style.width = '200px';
             MachineTrigger.clientIntro.style.color = 'white';
             MachineTrigger.clientIntro.style.display = 'none';
             document.getElementById('gamePanel').appendChild(MachineTrigger.clientIntro);
@@ -93,13 +89,12 @@ const xorProgram = {
     }
 };
 
-
 const xorIntro = "【按位取反】\n" +
-    "通过按钮操作，将完成二进制数按位取反\n" +
+    "二进制数按位取反。请把指针头指向最右边的数字。\n" +
     "\n" +
-    "(1)通过控制< > 按钮左右移动\n"+
-    "(2)通过控制0 1 按钮进行输入\n" +
-    "(3)将数字输入完成后，调整<>将绿色箭头对准最右边的数字\n"+
-    "(4)按下右边的按钮，开始执行"
-
+    "状态为 start 且读到 0 ：\n" +
+    "写入 1 ，左移，设置状态为 start\n" +
+    "\n" +
+    "状态为 start 且读到 1 ：\n" +
+    "写入 0 ，左移，设置状态为 start";
 

@@ -1,13 +1,13 @@
 const Component = require('../Component');
 const SortController = require('./SortController');
 const ENV_CLIENT = !(typeof window === 'undefined');
-
+const Client = require('../../client/Client');
 @Component.serializedName("SortTrigger")
 class SortTrigger extends Component {
 
     constructor() {
         super();
-
+		this.typeChar = ['产生随机数','冒泡排序','快速排序','插入排序','选择排序','显示提示'];
         this.props.triggerType = 0;
     }
 
@@ -21,6 +21,7 @@ class SortTrigger extends Component {
 
     onTriggerEnter() {
         if (ENV_CLIENT) {
+			Client.current.sendOperateMessage("正在执行操作——"+this.typeChar[this.props.triggerType]);
             if (this.props.triggerType === 5) {
                 SortTrigger.getClientIntro().innerText = sortIntro;
                 SortTrigger.getClientIntro().style.display = 'block';
@@ -62,32 +63,13 @@ class SortTrigger extends Component {
         }
     }
 
-    // static getClientIntro() {
-    //     if (!SortTrigger.clientIntro) {
-    //         SortTrigger.clientIntro = document.createElement('div');
-    //         SortTrigger.clientIntro.style.position = 'absolute';
-    //         SortTrigger.clientIntro.style.top = '10px';
-    //         SortTrigger.clientIntro.style.left = '10px';
-    //         SortTrigger.clientIntro.style.width = '200px';
-    //         SortTrigger.clientIntro.style.color = 'white';
-    //         SortTrigger.clientIntro.style.display = 'none';
-    //         document.getElementById('gamePanel').appendChild(SortTrigger.clientIntro);
-    //     }
-    //     return SortTrigger.clientIntro;
-    // }
     static getClientIntro() {
         if (!SortTrigger.clientIntro) {
             SortTrigger.clientIntro = document.createElement('div');
             SortTrigger.clientIntro.style.position = 'absolute';
-            SortTrigger.clientIntro.style.height = '190px';
-            SortTrigger.clientIntro.style.width = '310px';
-            SortTrigger.clientIntro.style.left = '37.5%';
-            SortTrigger.clientIntro.style.top = '5%';
-            SortTrigger.clientIntro.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-            //SortTrigger.clientIntro.style.transform = translate('-50%','-30%');
-            //SortTrigger.clientIntro.style.top = '10px';
-            //SortTrigger.clientIntro.style.left = '10px';
-
+            SortTrigger.clientIntro.style.top = '10px';
+            SortTrigger.clientIntro.style.left = '10px';
+            SortTrigger.clientIntro.style.width = '200px';
             SortTrigger.clientIntro.style.color = 'white';
             SortTrigger.clientIntro.style.display = 'none';
             document.getElementById('gamePanel').appendChild(SortTrigger.clientIntro);

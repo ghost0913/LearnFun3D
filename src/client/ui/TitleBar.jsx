@@ -29,20 +29,12 @@ class Info extends React.Component {
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.vedioCall = this.vedioCall.bind(this);
         this.handleLeaveRoom = this.handleLeaveRoom.bind(this);
     }
     handleClick(event) {
         event.preventDefault();
         this.setState({open: true, anchorEl: event.currentTarget});
     };
-
-    vedioCall() {
-        if (confirm('确定开启视频通话？')) {
-          window.open('https://43.143.111.113:22222', '_blank');
-        }
-      }
-      
 
     handleClose() {
         this.setState({open: false});
@@ -61,11 +53,6 @@ class Info extends React.Component {
         return (
             <div style={{display: 'flex'}}>
                 <p style={{color: 'white', marginRight: '7px'}}>Hello,&nbsp;{this.props.user.username}!</p>
-                <Button
-                    label={'视频通话'}
-                    style={{color: 'white', marginTop: '7px'}}
-                    onClick={this.vedioCall}>
-                </Button>
                 <Button
                     label={'选项'}
                     style={{color: 'white', marginTop: '7px'}}

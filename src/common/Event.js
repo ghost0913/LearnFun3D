@@ -21,6 +21,7 @@ module.exports = {
     SERVER_DESTROY: 'destroy',
 
     CHAT_MESSAGE: 'chatMessage',
+	OPERATE_MESSAGE: 'operateMessage',
 
 };
 // create roomId

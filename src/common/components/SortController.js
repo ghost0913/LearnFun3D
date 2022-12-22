@@ -73,20 +73,20 @@ class SortController extends Component {
         }
     }
 
-    // 内部某个时刻所处的状态
+    // 图灵机内部某个时刻所处的状态
     setSortState() {
         if (this.cooldown > 0) return;
-        this.cooldown += this.props.cooldown;    }
+        this.cooldown += this.props.cooldown;
+    }
 
     repaint() {
         // console.log("11111");
-        //判断当前是否在客户端（浏览器）运行，如果不是，则将服务器状态设为当前状态
         if (!ENV_CLIENT) {
             // 服务端发送同步信息
             // console.log("2222");
             this.gameObject.serverState = this.state;
         } else {
-            //如果是客户端，则循环判断每15个元素是否需要chagecolor
+            
             for (let i = 0; i < 15; ++ i) {
                 let changeColor=false;
                 console.log('this.program=' + this.program);
